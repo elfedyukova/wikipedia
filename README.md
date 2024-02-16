@@ -9,7 +9,7 @@ https://www.learnqa.ru/java
 
 ## Об этом проекте
 
-В рамках этого проекта будут созданы автотесты  для https://ru.wikipedia.org/wiki/
+В рамках этого проекта будут созданы автотесты для https://ru.wikipedia.org/wiki/
 
 ## Технологии
 

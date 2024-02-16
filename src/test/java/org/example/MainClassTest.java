@@ -1,8 +1,7 @@
 package org.example;
 
+import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class MainClassTest {
     @Test
@@ -10,6 +9,6 @@ public class MainClassTest {
         MainClass mainClass = new MainClass();
         int expected = 14;
         int actual = mainClass.getLocalNumber();
-        assertEquals(expected, actual);
+        Assert.assertTrue("Метод getLocalNumber не возвращает число 14!", expected == actual);
     }
 }
