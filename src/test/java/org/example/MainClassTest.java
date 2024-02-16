@@ -11,4 +11,12 @@ public class MainClassTest {
         int actual = mainClass.getLocalNumber();
         Assert.assertTrue("Метод getLocalNumber не возвращает число 14!", expected == actual);
     }
+
+    @Test
+    public void testGetClassNumber() {
+        MainClass mainClass = new MainClass();
+        int expected = 45;
+        int actual = mainClass.getClassNumber();
+        Assert.assertTrue("Метод getClassNumber возвращает число меньше или равное 45!", actual > expected);
+    }
 }
