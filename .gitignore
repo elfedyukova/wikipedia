@@ -1,4 +1,6 @@
 .idea
+.apks
+.libs
 .build
 # Default ignored files
 /shelf/

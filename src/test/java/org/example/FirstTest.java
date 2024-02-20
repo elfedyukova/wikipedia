@@ -20,12 +20,13 @@ public class FirstTest {
         capabilities.setCapability("appium:platformName", "Android");
         capabilities.setCapability("appium:deviceName", "AndroidTestDevice"); //может быть любым для Android
         capabilities.setCapability("appium:platformVersion", "8.1");
-        capabilities.setCapability("appium:automationName", "Appium");
+        capabilities.setCapability("appium:automationName", "UiAutomator2");
         capabilities.setCapability("appium:appPackage", "org.wikipedia");
         capabilities.setCapability("appium:appActivity", ".main.MainActivity");
-        capabilities.setCapability("appium:app", "C:\\Users\\adven\\dev\\mobile\\wikipedia\\wikipedia\\apks\\Wikipedia_2.7.50449-r-2023-07-31_Apkpure.apk");
+        capabilities.setCapability("appium:app",
+                "C:\\Users\\adven\\dev\\mobile\\wikipedia\\wikipedia\\apks\\Wikipedia_2.7.50449-r-2023-07-31_Apkpure.apk");
 
-        driver = new AndroidDriver(new URL("http://localhost:4723/"), capabilities);
+        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), capabilities);
     }
 
     @After
