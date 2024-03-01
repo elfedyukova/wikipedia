@@ -62,6 +62,47 @@ public class SimpleTest {
 
     }
 
+    @Test
+    public void searchCancelTest() {
+
+        waitForElementByIdAndClick(
+                "org.wikipedia:id/fragment_onboarding_skip_button",
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementByXpathAndClick(
+                "//*[contains(@text,'Search Wikipedia')]",
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementByXpathAndSendKeys(
+                "//*[contains(@text,'Search Wikipedia')]",
+                "Java",
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementByIdAndClick(
+                "org.wikipedia:id/search_close_btn",
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementNotPresent(
+                "//*[contains(@text,'Search Wikipedia')]",
+                "The element for canceling a search is present",
+                5
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -76,6 +117,12 @@ public class SimpleTest {
         return element;
     }
 
+    private WebElement waitForElementPresentAndSendKeys(By by, String value, String error_message, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        element.sendKeys(value);
+        return element;
+    }
+
     private WebElement waitForElementByIdAndClick(String id, String error_message, long timeoutInSeconds) {
         By by = By.id(id);
         return waitForElementPresentAndClick(by, error_message, timeoutInSeconds);
@@ -86,6 +133,11 @@ public class SimpleTest {
         return waitForElementPresentAndClick(by, error_message, timeoutInSeconds);
     }
 
+    private WebElement waitForElementByXpathAndSendKeys(String xpath, String value, String error_message, long timeoutInSeconds) {
+        By by = By.xpath(xpath);
+        return waitForElementPresentAndSendKeys(by, value, error_message, timeoutInSeconds);
+    }
+
     private void assertElementHasText(String xpath, String expectedText, String errorMessage) {
         By locator = By.xpath(xpath);
         WebDriverWait wait = new WebDriverWait(driver, 5);
@@ -94,4 +146,14 @@ public class SimpleTest {
         Assert.assertEquals(errorMessage, expectedText, actual);
     }
 
+    private boolean waitForElementNotPresent(String id, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.withMessage(error_message + "\n");
+        By by = By.id(id);
+        return wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(by)
+        );
+    }
+
 }
+
