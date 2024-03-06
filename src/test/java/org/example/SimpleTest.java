@@ -83,10 +83,11 @@ public class SimpleTest {
                 "Cannot find 'Search element' ",
                 5
         );
-
+        //  Было By.id("org.wikipedia:id/search_results_list")
+        //  Пробовала By.xpath("android.widget.TextView[contains(@text, 'Java')]") и то, что сейчас в тесте Почему-то не проходит тест
         waitForElementPresent(
-                By.id("org.wikipedia:id/search_results_list"),
-                "Cannot find 'Skip element' ",
+                By.xpath("android.widget.TextView@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')"),
+                "Cannot find 'element' ",
                 5
         );
 
