@@ -126,12 +126,9 @@ public class SimpleTest {
                 "Cannot find 'Search element' ",
                 5
         );
-        // "android.widget.TextView@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')" не ищет
-        //"android.widget.TextView[contains(@text, 'Java')]" не ищет
-        //"org.wikipedia:id/search_results_list" ищет
-        // первый из списка находит
+
         waitForWordPresent(
-                "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and @text=\"Java (programming language)\"]",
+                "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]",
                 "Cannot find 'elements with text Java' ",
                 5
         );
