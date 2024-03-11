@@ -85,8 +85,9 @@ public class SimpleTest {
         );
         //  Было By.id("org.wikipedia:id/search_results_list")
         //  Пробовала By.xpath("android.widget.TextView[contains(@text, 'Java')]") и то, что сейчас в тесте Почему-то не проходит тест
+        // By.xpath("android.widget.TextView@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')")
         waitForElementPresent(
-                By.xpath("android.widget.TextView@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')"),
+                By.id("org.wikipedia:id/search_results_list"),
                 "Cannot find 'element' ",
                 5
         );
@@ -100,6 +101,38 @@ public class SimpleTest {
         waitForElementNotPresent(
                 "//*[contains(@text,'Search Wikipedia')]",
                 "The element for canceling a search is present",
+                5
+        );
+    }
+
+    @Test
+    public void wordSearchTest() {
+
+        waitForElementByIdAndClick(
+                "org.wikipedia:id/fragment_onboarding_skip_button",
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementByXpathAndClick(
+                "//*[contains(@text,'Search Wikipedia')]",
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementByXpathAndSendKeys(
+                "//*[contains(@text,'Search Wikipedia')]",
+                "Java",
+                "Cannot find 'Search element' ",
+                5
+        );
+        // "android.widget.TextView@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')" не ищет
+        //"android.widget.TextView[contains(@text, 'Java')]" не ищет
+        //"org.wikipedia:id/search_results_list" ищет
+        // первый из списка находит
+        waitForWordPresent(
+                "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and @text=\"Java (programming language)\"]",
+                "Cannot find 'elements with text Java' ",
                 5
         );
     }
@@ -153,6 +186,15 @@ public class SimpleTest {
         By by = By.id(id);
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
+        );
+    }
+
+    private WebElement waitForWordPresent(String id, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.withMessage(error_message + "\n");
+        By by = By.xpath(id);
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
         );
     }
 
