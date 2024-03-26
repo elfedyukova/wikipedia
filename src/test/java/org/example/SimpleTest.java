@@ -63,7 +63,7 @@ public class SimpleTest {
         );
 
         assertElementHasText(
-                "//*[contains(@text,'Search Wikipedia')]",
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Search Wikipedia",
                 "Другой текст вместо ожидаемого Search Wikipedia"
         );
@@ -104,7 +104,7 @@ public class SimpleTest {
         );
 
         waitForElementNotPresent(
-                "//*[contains(@text,'Search Wikipedia')]",
+                By.id("//*[contains(@text,'Search Wikipedia')]"),
                 "The element for canceling a search is present",
                 5
         );
@@ -133,7 +133,7 @@ public class SimpleTest {
         );
 
         waitForWordPresent(
-                "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]",
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]"),
                 "Cannot find 'elements with text Java' ",
                 5
         );
@@ -162,7 +162,7 @@ public class SimpleTest {
         );
 
         waitForWordPresent(
-                "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]",
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]"),
                 "Cannot find 'elements with text Java' ",
                 5
         );
@@ -180,6 +180,7 @@ public class SimpleTest {
                 ExpectedConditions.presenceOfElementLocated(by)
         );
     }
+
     //перегрузка метода
     private WebElement waitForElementPresent(By by, String error_message) {
         return waitForElementPresent(by, error_message, 5);
@@ -197,27 +198,24 @@ public class SimpleTest {
         return element;
     }
 
-    private void assertElementHasText(String xpath, String expectedText, String errorMessage) {
-        By locator = By.xpath(xpath);
+    private void assertElementHasText(By by, String expectedText, String errorMessage) {
         WebDriverWait wait = new WebDriverWait(driver, 5);
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
         String actual = element.getText();
         Assert.assertEquals(errorMessage, expectedText, actual);
     }
 
-    private boolean waitForElementNotPresent(String id, String error_message, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
-        By by = By.id(id);
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
         );
     }
 
-    private WebElement waitForWordPresent(String id, String error_message, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+    private WebElement waitForWordPresent(By by, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
-        By by = By.xpath(id);
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(by)
         );
