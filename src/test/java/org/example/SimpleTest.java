@@ -1,10 +1,7 @@
 package org.example;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.touch.WaitOptions;
-import io.appium.java_client.touch.offset.PointOption;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -172,7 +169,8 @@ public class SimpleTest {
         );
 
         waitForWordPresent(
-                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]"),
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
+                        "and contains(@text, 'Java')]"),
                 "Cannot find 'elements with text Java' ",
                 5
         );
@@ -201,7 +199,8 @@ public class SimpleTest {
         );
 
         waitForElementPresentAndClick(
-                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and @text=\"Java (programming language)\"]"),
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
+                        "and @text=\"Java (programming language)\"]"),
                 "Cannot find 'Skip element' ",
                 5
         );
@@ -241,15 +240,53 @@ public class SimpleTest {
                 5
         );
 
-        waitForWordPresent(
-                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]"),
-                "Cannot find 'elements with text Java' ",
+        waitForElementPresentAndClick(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
+                        "and @text=\"Java (programming language)\"]"),
+                "Cannot find 'Skip element' ",
                 5
         );
 
-        verticalSwipeToBottom();
-        verticalSwipeToBottom();
-        verticalSwipeToBottom();
+        verticalSwipeToBottom(700);
+        verticalSwipeToBottom(700);
+        verticalSwipeToBottom(700);
+
+    }
+
+    @Test
+    public void swipeArticleToFooterTest() {
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Appium",
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
+                        " and @text=\"Automation for Apps\"]"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        swipeUpToFindElement(
+                By.xpath("//android.widget.TextView[@text=\"View article in browser\"]"),
+                "Cannot find 'View article in browser' ",
+                6
+        );
 
     }
 
@@ -307,38 +344,33 @@ public class SimpleTest {
         );
     }
 
-    protected void swipeUp(int timeOfSwipe) {
-
-        TouchAction touchAction = new TouchAction(driver);
+    // свайп снизу вверх
+    public void verticalSwipeToBottom(int timeOfSwipe) {
+        //получаем параметры девайса и передаем параметры экрана в size
         Dimension size = driver.manage().window().getSize();
 
-        int x = size.width / 2;
-        int start_y = (int) (size.height * 0.8);
-        int end_y = (int) (size.height * 0.2);
-
-        touchAction.press(PointOption.point(x, start_y))
-                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(timeOfSwipe)))
-                .moveTo(PointOption.point(x, end_y)).release().perform();
-    }
-
-    public void verticalSwipeToBottom() {
-        Dimension size = driver.manage().window().getSize();
-        int startY = (int) (size.height * 0.70);
+        int startY = (int) (size.height * 0.70); // получаем начальную точку экрана, находящуюся немного внизу
         int endY = (int) (size.height * 0.30);
-        int centerX = size.width / 2;
+        int centerX = size.width / 2; //ось Х не меняется так, как двигаем снизу вверх и может быть одной
 
+        //Создание объектов регистрации событий касания на экране
+
+        //моделирует действия конкретного типа указателя, пальца (TOUCH). В качестве имени указателя используется строка "finger".
         PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+        //объект последовательность действий, которые будут выполнены указателем.
+        // Первый параметр - это указатель, который будет использоваться.
+        // Второй параметр - это индекс, который указывает на порядковый номер данной последовательности действий среди всех остальных.
         Sequence swipe = new Sequence(finger, 1);
 
         //Дваигаем палец на начальную позицию
         swipe.addAction(finger.createPointerMove(Duration.ofSeconds(0),
-                PointerInput.Origin.viewport(), centerX, (int) startY));
+                PointerInput.Origin.viewport(), centerX, startY));
         //Палец прикасакается к экрану
         swipe.addAction(finger.createPointerDown(0));
 
         //Палец двигается к конечной точке
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(700),
-                PointerInput.Origin.viewport(), centerX, (int) endY));
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(timeOfSwipe),
+                PointerInput.Origin.viewport(), centerX, endY));
 
         //Убираем палец с экрана
         swipe.addAction(finger.createPointerUp(0));
@@ -348,15 +380,19 @@ public class SimpleTest {
     }
 
     protected void swipeUpQuick() {
-        swipeUp(200);
+        verticalSwipeToBottom(200);
     }
 
     protected void swipeUpToFindElement(By by, String error_message, int max_swipes) {
         int already_swiped = 0;
+        // цикл постоянно ищет элементы из by и завершится как только будет найден элемент
         while (driver.findElements(by).size() == 0) {
-
+            // ограничение по количеству проведенных свайпов
             if (already_swiped > max_swipes) {
-                waitForElementPresent(by, "Cannot find element by swipping up. \n" + error_message, 0);
+                waitForElementPresent(
+                        by,
+                        "Cannot find element by swipping up. \n" + error_message,
+                        0);
                 return;
             }
             swipeUpQuick();
