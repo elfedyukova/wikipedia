@@ -91,7 +91,7 @@ public class SimpleTest {
                 "Cannot find 'Search element' ",
                 5
         );
-        //
+
         waitForElementPresent(
                 By.id("org.wikipedia:id/search_results_list"),
                 "Cannot find 'element' "
@@ -107,6 +107,45 @@ public class SimpleTest {
                 By.id("//*[contains(@text,'Search Wikipedia')]"),
                 "The element for canceling a search is present",
                 5
+        );
+    }
+
+    @Test
+    public void searchClearCancelTest() {
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Java",
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Cannot find 'element' "
+        );
+
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot clear text in search field",
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find 'element' "
         );
     }
 
@@ -136,6 +175,47 @@ public class SimpleTest {
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and contains(@text, 'Java')]"),
                 "Cannot find 'elements with text Java' ",
                 5
+        );
+    }
+
+    @Test
+    public void compareArticleTitleTest() {
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Java",
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and @text=\"Java (programming language)\"]"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        WebElement titleElement = waitForElementPresent(
+                By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
+                "Cannot find article title "
+        );
+
+        String articleTitle = titleElement.getAttribute("text");
+        Assert.assertEquals(
+                "We do not see Java (programming language)",
+                "Java (programming language)",
+                articleTitle
         );
     }
 
@@ -211,6 +291,12 @@ public class SimpleTest {
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
         );
+    }
+
+    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        element.clear();
+        return element;
     }
 
     private WebElement waitForWordPresent(By by, String error_message, long timeoutInSeconds) {
