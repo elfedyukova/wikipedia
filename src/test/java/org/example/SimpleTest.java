@@ -333,6 +333,45 @@ public class SimpleTest {
                 amount_of_search_elements > 0
         );
 
+    }
+
+    @Test
+    public void amountOfEmptySearchTest() {
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        String search_line = "qqqqqqqqqq";
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                search_line,
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
+        String empty_result_label = "//*[@text='No results']";
+
+        waitForElementPresent(
+                By.xpath(empty_result_label),
+                "Cannot find anything by the request " + empty_result_label,
+                15
+
+        );
+
+        assertElementNotPresent(
+                By.xpath(search_result_locator),
+                "We've found some results by request " + search_line
+        );
 
     }
 
@@ -686,6 +725,18 @@ public class SimpleTest {
         List elements = driver.findElements(by);
         return elements.size();
     }
+
+    private void assertElementNotPresent(By by, String error_message) {
+
+        int amount_of_elements = getAmountOfElements(by);
+
+        if (amount_of_elements > 0) {
+            String default_message = "An element '" + by.toString() + "' supposed to be not present";
+            throw new AssertionError(default_message + "" + error_message);
+        }
+
+    }
+
 
     // свайп снизу вверх
     public void verticalSwipeToBottom(int timeOfSwipe) {
