@@ -18,6 +18,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.List;
 
 public class SimpleTest {
 
@@ -291,6 +292,51 @@ public class SimpleTest {
     }
 
     @Test
+    public void amountOfNotEmptySearchTest() {
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        String search_line = "Linkin park discography";
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                search_line,
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']" +
+                "//*[@resource-id='org.wikipedia:id/page_list_item_title']";
+
+        waitForElementPresent(
+                By.xpath(search_result_locator),
+                "Cannot find anything by the request " + search_line,
+                15
+
+        );
+
+        int amount_of_search_elements = getAmountOfElements(
+                By.xpath(search_result_locator)
+        );
+
+        Assert.assertTrue(
+                "We found too few results",
+                amount_of_search_elements > 0
+        );
+
+
+    }
+
+    @Test
     public void removeArticleFromReadingListTest() {
 
         waitForElementPresentAndClick(
@@ -343,9 +389,11 @@ public class SimpleTest {
                 5
         );
 
+        String name_of_folder = "My first reading list";
+
         waitForElementPresentAndSendKeys(
                 By.xpath("//android.widget.EditText[@resource-id=\"org.wikipedia:id/text_input\"]"),
-                "My first reading list",
+                name_of_folder,
                 "Cannot find 'Input element' ",
                 5
         );
@@ -389,7 +437,7 @@ public class SimpleTest {
 
         waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/item_title\" " +
-                        "and @text=\"My first reading list\"]"),
+                        "and @text='" + name_of_folder + "']"),
                 "Cannot find 'Skip element' ",
                 5
         );
@@ -632,6 +680,11 @@ public class SimpleTest {
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(by)
         );
+    }
+
+    private int getAmountOfElements(By by) {
+        List elements = driver.findElements(by);
+        return elements.size();
     }
 
     // свайп снизу вверх
