@@ -192,9 +192,11 @@ public class SimpleTest {
                 5
         );
 
+        String search_text = "Java";
+
         waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-                "Java",
+                search_text,
                 "Cannot find 'Search element' ",
                 5
         );
@@ -208,10 +210,12 @@ public class SimpleTest {
 
         WebElement titleElement = waitForElementPresent(
                 By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
-                "Cannot find article title "
+                "Cannot find article title ",
+                5
         );
 
         String articleTitle = titleElement.getAttribute("text");
+
         Assert.assertEquals(
                 "We do not see Java (programming language)",
                 "Java (programming language)",
@@ -373,6 +377,52 @@ public class SimpleTest {
                 "We've found some results by request " + search_line
         );
 
+    }
+
+    @Test
+    public void compareArticleOfTitleTest() {
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        String search_text = "Java";
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                search_text,
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
+                        "and @text=\"Java (programming language)\"]"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+
+        waitForElementPresent(
+                By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
+                "hg",
+                5
+
+        );
+
+        String title_locator = "//android.widget.TextView[@text='Java (programming language)']";
+
+        assertElementPresent(
+                By.xpath(title_locator)
+        );
     }
 
     @Test
@@ -737,6 +787,15 @@ public class SimpleTest {
 
     }
 
+    private void assertElementPresent(By by) {
+
+        WebElement element = driver.findElement(by);
+        String title_of_element = element.getText();
+
+        if (title_of_element.isEmpty()) {
+            throw new AssertionError("Элемент '" + by.toString() + "' не найден!");
+        }
+    }
 
     // свайп снизу вверх
     public void verticalSwipeToBottom(int timeOfSwipe) {
