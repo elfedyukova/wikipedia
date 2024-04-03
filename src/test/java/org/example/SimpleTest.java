@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
@@ -714,7 +715,75 @@ public class SimpleTest {
                 5
         );
 
+    }
 
+    @Test
+    public void changeScreenOrientationOnSearchResultsTest(){
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        String search_text = "Java";
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                search_text,
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
+                        "and @text=\"Java (programming language)\"]"),
+                "Cannot find text " + search_text,
+                15
+        );
+
+        String title_before_rotation = waitForElementAndGetAttribute(
+                By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
+                "text",
+                "Cannot find article",
+                15
+        );
+
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+
+        String title_after_rotation = waitForElementAndGetAttribute(
+                By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
+                "text",
+                "Cannot find article",
+                15
+        );
+
+        Assert.assertEquals(
+                "Article title have been changed after screen rotation",
+                title_before_rotation,
+                title_after_rotation
+        );
+
+        driver.rotate(ScreenOrientation.PORTRAIT);
+
+        String title_after_second_rotation = waitForElementAndGetAttribute(
+                By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
+                "text",
+                "Cannot find article",
+                15
+        );
+
+        Assert.assertEquals(
+                "Article title have been changed after screen rotation",
+                title_before_rotation,
+                title_after_second_rotation
+        );
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
@@ -769,6 +838,11 @@ public class SimpleTest {
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(by)
         );
+    }
+
+    private String waitForElementAndGetAttribute(By by, String attribute ,String error_message, long timeoutInSeconds){
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        return element.getAttribute(attribute);
     }
 
     private int getAmountOfElements(By by) {
