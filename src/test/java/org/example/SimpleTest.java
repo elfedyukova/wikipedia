@@ -755,35 +755,84 @@ public class SimpleTest {
                 15
         );
 
-        driver.rotate(ScreenOrientation.LANDSCAPE);
+        try {
+            driver.rotate(ScreenOrientation.LANDSCAPE);
 
-        String title_after_rotation = waitForElementAndGetAttribute(
-                By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
-                "text",
-                "Cannot find article",
+            String title_after_rotation = waitForElementAndGetAttribute(
+                    By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
+                    "text",
+                    "Cannot find article",
+                    15
+            );
+
+            Assert.assertEquals(
+                    "Article title have been changed after screen rotation",
+                    title_before_rotation,
+                    title_after_rotation
+            );
+
+            driver.rotate(ScreenOrientation.PORTRAIT);
+
+            String title_after_second_rotation = waitForElementAndGetAttribute(
+                    By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
+                    "text",
+                    "Cannot find article",
+                    15
+            );
+
+            Assert.assertEquals(
+                    "Article title have been changed after screen rotation",
+                    title_before_rotation,
+                    title_after_second_rotation
+            );
+        } finally {
+            driver.rotate(ScreenOrientation.PORTRAIT);
+        }
+
+    }
+
+    @Test
+    public void checkSearchArticleInBackgroundTest() {
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        String search_text = "Java";
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                search_text,
+                "Cannot find 'Search element' ",
+                5
+        );
+
+        waitForElementPresent(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
+                        "and @text=\"Java (programming language)\"]"),
+                "Cannot find text " + search_text,
                 15
         );
 
-        Assert.assertEquals(
-                "Article title have been changed after screen rotation",
-                title_before_rotation,
-                title_after_rotation
-        );
+        //преобразование duration в реальное время в секундах
+        Duration duration = Duration.ofSeconds(2);
+        driver.runAppInBackground(duration);
 
-        driver.rotate(ScreenOrientation.PORTRAIT);
-
-        String title_after_second_rotation = waitForElementAndGetAttribute(
-                By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
-                "text",
-                "Cannot find article",
+        waitForElementPresent(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
+                        "and @text=\"Java (programming language)\"]"),
+                "Cannot find text article after returning from background",
                 15
         );
 
-        Assert.assertEquals(
-                "Article title have been changed after screen rotation",
-                title_before_rotation,
-                title_after_second_rotation
-        );
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
