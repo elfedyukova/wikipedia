@@ -1,10 +1,7 @@
 package org.example;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
-import org.junit.After;
+import lib.CoreTestCase;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -12,42 +9,18 @@ import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URL;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-public class SimpleTest {
 
-    private AppiumDriver driver;
-
-    @Before
-    public void setUp() throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        capabilities.setCapability("appium:platformName", "Android");
-        capabilities.setCapability("appium:deviceName", "AndroidTestDevice"); //может быть любым для Android
-        capabilities.setCapability("appium:platformVersion", "8.1");
-        capabilities.setCapability("appium:automationName", "UiAutomator2");
-        capabilities.setCapability("appium:appPackage", "org.wikipedia");
-        capabilities.setCapability("appium:appActivity", ".main.MainActivity");
-        capabilities.setCapability("appium:app",
-                "C:\\Users\\adven\\dev\\mobile\\wikipedia\\wikipedia\\apks\\Wikipedia_2.7.50449-r-2023-07-31_Apkpure.apk");
-
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), capabilities);
-    }
-
-    @After
-    public void tearDown() {
-        driver.quit();
-    }
+public class SimpleTest extends CoreTestCase {
 
     @Test
-    public void elementHasTextTest() {
+    public void testElementHasText() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -70,7 +43,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void searchCancelTest() {
+    public void testSearchCancel() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -110,7 +83,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void searchClearCancelTest() {
+    public void testSearchClearCancel() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -149,7 +122,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void wordSearchTest() {
+    public void testWordSearch() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -179,7 +152,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void compareArticleTitleTest() {
+    public void testCompareArticleTitle() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -212,7 +185,7 @@ public class SimpleTest {
         WebElement titleElement = waitForElementPresent(
                 By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
                 "Cannot find article title ",
-                5
+                10
         );
 
         String articleTitle = titleElement.getAttribute("text");
@@ -225,7 +198,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void swipeArticleTest() {
+    public void testSwipeArticle() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -260,7 +233,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void swipeArticleToFooterTest() {
+    public void testSwipeArticleToFooter() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -297,7 +270,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void amountOfNotEmptySearchTest() {
+    public void testAmountOfNotEmptySearch() {
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
@@ -341,7 +314,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void amountOfEmptySearchTest() {
+    public void testAmountOfEmptySearch() {
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
@@ -381,7 +354,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void compareArticleOfTitleTest() {
+    public void testCompareArticleOfTitle() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -427,7 +400,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void removeArticleFromReadingListTest() {
+    public void testRemoveArticleFromReadingList() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -552,7 +525,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void saveTwoArticleTest() {
+    public void testSaveTwoArticle() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -718,7 +691,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void changeScreenOrientationOnSearchResultsTest(){
+    public void testChangeScreenOrientationOnSearchResults() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -792,7 +765,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void checkSearchArticleInBackgroundTest() {
+    public void testCheckSearchArticleInBackground() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -889,7 +862,7 @@ public class SimpleTest {
         );
     }
 
-    private String waitForElementAndGetAttribute(By by, String attribute ,String error_message, long timeoutInSeconds){
+    private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
     }
