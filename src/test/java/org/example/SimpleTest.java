@@ -1,40 +1,41 @@
 package org.example;
 
 import lib.CoreTestCase;
+import lib.ui.MainPageObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.PointerInput;
-import org.openqa.selenium.interactions.Sequence;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class SimpleTest extends CoreTestCase {
 
+    private MainPageObject MainPageObject;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        MainPageObject = new MainPageObject(driver);
+    }
+
     @Test
     public void testElementHasText() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        assertElementHasText(
+        MainPageObject.assertElementHasText(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Search Wikipedia",
                 "Другой текст вместо ожидаемого Search Wikipedia"
@@ -45,37 +46,37 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testSearchCancel() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Java",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.id("org.wikipedia:id/search_results_list"),
                 "Cannot find 'element' "
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementNotPresent(
+        MainPageObject.waitForElementNotPresent(
                 By.id("//*[contains(@text,'Search Wikipedia')]"),
                 "The element for canceling a search is present",
                 5
@@ -85,37 +86,37 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testSearchClearCancel() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Java",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.id("org.wikipedia:id/search_results_list"),
                 "Cannot find 'element' "
         );
 
-        waitForElementAndClear(
+        MainPageObject.waitForElementAndClear(
                 By.id("org.wikipedia:id/search_src_text"),
                 "Cannot clear text in search field",
                 5
         );
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.id("org.wikipedia:id/search_src_text"),
                 "Cannot find 'element' "
         );
@@ -124,26 +125,26 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testWordSearch() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Java",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForWordPresent(
+        MainPageObject.waitForWordPresent(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
                         "and contains(@text, 'Java')]"),
                 "Cannot find 'elements with text Java' ",
@@ -154,13 +155,13 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testCompareArticleTitle() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
@@ -168,21 +169,21 @@ public class SimpleTest extends CoreTestCase {
 
         String search_text = "Java";
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 search_text,
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
                         "and @text=\"Java (programming language)\"]"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        WebElement titleElement = waitForElementPresent(
+        WebElement titleElement = MainPageObject.waitForElementPresent(
                 By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
                 "Cannot find article title ",
                 10
@@ -200,68 +201,68 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testSwipeArticle() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Java",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
                         "and @text=\"Java (programming language)\"]"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        verticalSwipeToBottom(700);
-        verticalSwipeToBottom(700);
-        verticalSwipeToBottom(700);
+        MainPageObject.verticalSwipeToBottom(700);
+        MainPageObject.verticalSwipeToBottom(700);
+        MainPageObject.verticalSwipeToBottom(700);
 
     }
 
     @Test
     public void testSwipeArticleToFooter() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Appium",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
                         " and @text=\"Automation for Apps\"]"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        swipeUpToFindElement(
+        MainPageObject.swipeUpToFindElement(
                 By.xpath("//android.widget.TextView[@text=\"View article in browser\"]"),
                 "Cannot find 'View article in browser' ",
                 6
@@ -271,13 +272,13 @@ public class SimpleTest extends CoreTestCase {
 
     @Test
     public void testAmountOfNotEmptySearch() {
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
@@ -285,7 +286,7 @@ public class SimpleTest extends CoreTestCase {
 
         String search_line = "Linkin park discography";
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 search_line,
                 "Cannot find 'Search element' ",
@@ -295,14 +296,14 @@ public class SimpleTest extends CoreTestCase {
         String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']" +
                 "//*[@resource-id='org.wikipedia:id/page_list_item_title']";
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(search_result_locator),
                 "Cannot find anything by the request " + search_line,
                 15
 
         );
 
-        int amount_of_search_elements = getAmountOfElements(
+        int amount_of_search_elements = MainPageObject.getAmountOfElements(
                 By.xpath(search_result_locator)
         );
 
@@ -315,13 +316,13 @@ public class SimpleTest extends CoreTestCase {
 
     @Test
     public void testAmountOfEmptySearch() {
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
@@ -329,7 +330,7 @@ public class SimpleTest extends CoreTestCase {
 
         String search_line = "qqqqqqqqqq";
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 search_line,
                 "Cannot find 'Search element' ",
@@ -339,14 +340,14 @@ public class SimpleTest extends CoreTestCase {
         String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
         String empty_result_label = "//*[@text='No results']";
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(empty_result_label),
                 "Cannot find anything by the request " + empty_result_label,
                 15
 
         );
 
-        assertElementNotPresent(
+        MainPageObject.assertElementNotPresent(
                 By.xpath(search_result_locator),
                 "We've found some results by request " + search_line
         );
@@ -356,13 +357,13 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testCompareArticleOfTitle() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
@@ -370,14 +371,14 @@ public class SimpleTest extends CoreTestCase {
 
         String search_text = "Java";
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 search_text,
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
                         "and @text=\"Java (programming language)\"]"),
                 "Cannot find 'Skip element' ",
@@ -385,7 +386,7 @@ public class SimpleTest extends CoreTestCase {
         );
 
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
                 "hg",
                 5
@@ -394,7 +395,7 @@ public class SimpleTest extends CoreTestCase {
 
         String title_locator = "//android.widget.TextView[@text='Java (programming language)']";
 
-        assertElementPresent(
+        MainPageObject.assertElementPresent(
                 By.xpath(title_locator)
         );
     }
@@ -402,51 +403,51 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testRemoveArticleFromReadingList() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Appium",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
                         " and @text=\"Automation for Apps\"]"),
                 "Cannot find article 'Automation for Apps' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@content-desc=\"Save\"]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@content-desc=\"Save\"]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/title\" and @text=\"Add to another reading list\"]"),
                 "Cannot find element 'Add to another reading list' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@text=\"Create new\"]"),
                 "Cannot find element 'Create new' ",
                 5
@@ -454,69 +455,69 @@ public class SimpleTest extends CoreTestCase {
 
         String name_of_folder = "My first reading list";
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//android.widget.EditText[@resource-id=\"org.wikipedia:id/text_input\"]"),
                 name_of_folder,
                 "Cannot find 'Input element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.EditText[@resource-id=\"org.wikipedia:id/text_input\"]"),
                 "Cannot find 'Input element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("android:id/button1"),
                 "Cannot find 'OK element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 //By.id("Navigate up"),
                 By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
                 "Cannot find 'Back element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
                 "Cannot find 'Back element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("(//android.widget.ImageView[@resource-id=\"org.wikipedia:id/navigation_bar_item_icon_view\"])[2]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.Button[@resource-id=\"org.wikipedia:id/negativeButton\"]"),
                 "Cannot find 'Not now' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/item_title\" " +
                         "and @text='" + name_of_folder + "']"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\"]"),
                 "Cannot find 'Article element' ",
                 5
         );
 
-        swipeElementToRight(
+        MainPageObject.swipeElementToRight(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\"]"),
                 "Test cannot swipe to left"
         );
 
-        waitForElementNotPresent(
+        MainPageObject.waitForElementNotPresent(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\"]"),
                 "Cannot delete save article",
                 5
@@ -527,162 +528,162 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testSaveTwoArticle() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Moscow",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
                         " and @text=\"Capital and largest city of Russia\"]"),
                 "Cannot find article 'Automation for Apps' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@content-desc=\"Save\"]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@content-desc=\"Save\"]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/title\" and @text=\"Add to another reading list\"]"),
                 "Cannot find element 'Add to another reading list' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@text=\"Create new\"]"),
                 "Cannot find element 'Create new' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//android.widget.EditText[@resource-id=\"org.wikipedia:id/text_input\"]"),
                 "City",
                 "Cannot find 'Input element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.EditText[@resource-id=\"org.wikipedia:id/text_input\"]"),
                 "Cannot find 'Input element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("android:id/button1"),
                 "Cannot find 'OK element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_toolbar_button_search\"]"),
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//android.widget.EditText[@resource-id=\"org.wikipedia:id/search_src_text\"]"),
                 "Saint-Petersburg",
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and @text=\"Saint Petersburg\"]"),
                 "Cannot find article 'Automation for Apps' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@content-desc=\"Save\"]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@content-desc=\"Save\"]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/title\" and @text=\"Add to another reading list\"]"),
                 "Cannot find element 'Add to another reading list' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/item_title\" and @text=\"City\"]"),
                 "Cannot find element 'Add to another reading list' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 //By.id("Navigate up"),
                 By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
                 "Cannot find 'Back element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
                 "Cannot find 'Back element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
                 "Cannot find 'Back element' ",
                 5
         );
 
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("(//android.widget.ImageView[@resource-id=\"org.wikipedia:id/navigation_bar_item_icon_view\"])[2]"),
                 "Cannot find 'Save element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.Button[@resource-id=\"org.wikipedia:id/negativeButton\"]"),
                 "Cannot find 'Not now' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/item_title\" and @text=\"City\"]"),
                 "Cannot find 'Not now' ",
                 5
         );
 
-        swipeElementToRight(
+        MainPageObject.swipeElementToRight(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" and @text=\"Moscow\"]"),
                 "Test cannot swipe to left"
         );
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\"]"),
                 "",
                 5
@@ -693,13 +694,13 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testChangeScreenOrientationOnSearchResults() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
@@ -707,21 +708,21 @@ public class SimpleTest extends CoreTestCase {
 
         String search_text = "Java";
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 search_text,
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
                         "and @text=\"Java (programming language)\"]"),
                 "Cannot find text " + search_text,
                 15
         );
 
-        String title_before_rotation = waitForElementAndGetAttribute(
+        String title_before_rotation = MainPageObject.waitForElementAndGetAttribute(
                 By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
                 "text",
                 "Cannot find article",
@@ -731,7 +732,7 @@ public class SimpleTest extends CoreTestCase {
         try {
             driver.rotate(ScreenOrientation.LANDSCAPE);
 
-            String title_after_rotation = waitForElementAndGetAttribute(
+            String title_after_rotation = MainPageObject.waitForElementAndGetAttribute(
                     By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
                     "text",
                     "Cannot find article",
@@ -746,7 +747,7 @@ public class SimpleTest extends CoreTestCase {
 
             driver.rotate(ScreenOrientation.PORTRAIT);
 
-            String title_after_second_rotation = waitForElementAndGetAttribute(
+            String title_after_second_rotation = MainPageObject.waitForElementAndGetAttribute(
                     By.xpath("//android.widget.TextView[@text=\"Java (programming language)\"]"),
                     "text",
                     "Cannot find article",
@@ -767,13 +768,13 @@ public class SimpleTest extends CoreTestCase {
     @Test
     public void testCheckSearchArticleInBackground() {
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Cannot find 'Skip element' ",
                 5
         );
 
-        waitForElementPresentAndClick(
+        MainPageObject.waitForElementPresentAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find 'Search element' ",
                 5
@@ -781,14 +782,14 @@ public class SimpleTest extends CoreTestCase {
 
         String search_text = "Java";
 
-        waitForElementPresentAndSendKeys(
+        MainPageObject.waitForElementPresentAndSendKeys(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 search_text,
                 "Cannot find 'Search element' ",
                 5
         );
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
                         "and @text=\"Java (programming language)\"]"),
                 "Cannot find text " + search_text,
@@ -799,7 +800,7 @@ public class SimpleTest extends CoreTestCase {
         Duration duration = Duration.ofSeconds(2);
         driver.runAppInBackground(duration);
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
                         "and @text=\"Java (programming language)\"]"),
                 "Cannot find text article after returning from background",
@@ -808,223 +809,6 @@ public class SimpleTest extends CoreTestCase {
 
     }
 
-    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + "\n");
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
-
-    //перегрузка метода
-    private WebElement waitForElementPresent(By by, String error_message) {
-        return waitForElementPresent(by, error_message, 5);
-    }
-
-    private WebElement waitForElementPresentAndClick(By by, String error_message, long timeoutInSeconds) {
-        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
-        element.click();
-        return element;
-    }
-
-    private WebElement waitForElementPresentAndSendKeys(By by, String value, String error_message, long timeoutInSeconds) {
-        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
-        element.sendKeys(value);
-        return element;
-    }
-
-    private void assertElementHasText(By by, String expectedText, String errorMessage) {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
-        String actual = element.getText();
-        Assert.assertEquals(errorMessage, expectedText, actual);
-    }
-
-    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + "\n");
-        return wait.until(
-                ExpectedConditions.invisibilityOfElementLocated(by)
-        );
-    }
-
-    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds) {
-        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
-        element.clear();
-        return element;
-    }
-
-    private WebElement waitForWordPresent(By by, String error_message, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + "\n");
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
-
-    private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds) {
-        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
-        return element.getAttribute(attribute);
-    }
-
-    private int getAmountOfElements(By by) {
-        List elements = driver.findElements(by);
-        return elements.size();
-    }
-
-    private void assertElementNotPresent(By by, String error_message) {
-
-        int amount_of_elements = getAmountOfElements(by);
-
-        if (amount_of_elements > 0) {
-            String default_message = "An element '" + by.toString() + "' supposed to be not present";
-            throw new AssertionError(default_message + "" + error_message);
-        }
-
-    }
-
-    private void assertElementPresent(By by) {
-
-        WebElement element = driver.findElement(by);
-        String title_of_element = element.getText();
-
-        if (title_of_element.isEmpty()) {
-            throw new AssertionError("Элемент '" + by.toString() + "' не найден!");
-        }
-    }
-
-    // свайп снизу вверх
-    public void verticalSwipeToBottom(int timeOfSwipe) {
-        //получаем параметры девайса и передаем параметры экрана в size
-        Dimension size = driver.manage().window().getSize();
-
-        int startY = (int) (size.height * 0.70); // получаем начальную точку экрана, находящуюся немного внизу
-        int endY = (int) (size.height * 0.30);
-        int centerX = size.width / 2; //ось Х не меняется так, как двигаем снизу вверх и может быть одной
-
-        //Создание объектов регистрации событий касания на экране
-
-        //моделирует действия конкретного типа указателя, пальца (TOUCH). В качестве имени указателя используется строка "finger".
-        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-        //объект последовательность действий, которые будут выполнены указателем.
-        // Первый параметр - это указатель, который будет использоваться.
-        // Второй параметр - это индекс, который указывает на порядковый номер данной последовательности действий среди всех остальных.
-        Sequence swipe = new Sequence(finger, 1);
-
-        //Дваигаем палец на начальную позицию
-        swipe.addAction(finger.createPointerMove(Duration.ofSeconds(0),
-                PointerInput.Origin.viewport(), centerX, startY));
-        //Палец прикасакается к экрану
-        swipe.addAction(finger.createPointerDown(0));
-
-        //Палец двигается к конечной точке
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(timeOfSwipe),
-                PointerInput.Origin.viewport(), centerX, endY));
-
-        //Убираем палец с экрана
-        swipe.addAction(finger.createPointerUp(0));
-
-        //Выполняем действия
-        driver.perform(Arrays.asList(swipe));
-    }
-
-    protected void swipeUpQuick() {
-        verticalSwipeToBottom(200);
-    }
-
-    protected void swipeUpToFindElement(By by, String error_message, int max_swipes) {
-        int already_swiped = 0;
-        // цикл постоянно ищет элементы из by и завершится как только будет найден элемент
-        while (driver.findElements(by).size() == 0) {
-            // ограничение по количеству проведенных свайпов
-            if (already_swiped > max_swipes) {
-                waitForElementPresent(
-                        by,
-                        "Cannot find element by swipping up. \n" + error_message,
-                        0);
-                return;
-            }
-            swipeUpQuick();
-            ++already_swiped;
-        }
-
-    }
-
-    //Свайп справа налево (движение по оси Y не происходит)
-    //Нашли элемент, установили местоположение по оси X,Y. После этого передвинуть его по оси X справа налево
-    protected void swipeElementToLeft(By by, String error_message) {
-        WebElement element = waitForElementPresent(
-                by,
-                error_message,
-                10);
-
-        // В переменную left_x записали самую левую точку нашего элемента по оси Х
-        int left_x = element.getLocation().getX();
-        // Находим самую правую точку экрана. element.getSize().getWidth() размер нашего элемента по ширине
-        int right_x = left_x + element.getSize().getWidth();
-
-        int upper_y = element.getLocation().getY();
-        int lower_y = upper_y + element.getSize().getHeight();
-
-        int middle_y = (upper_y + lower_y) / 2;
-
-        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-        Sequence swipe = new Sequence(finger, 1);
-
-        //Дваигаем палец на начальную позицию
-        swipe.addAction(finger.createPointerMove(Duration.ofSeconds(0),
-                PointerInput.Origin.viewport(), right_x, middle_y));
-        //Палец прикасакается к экрану
-        swipe.addAction(finger.createPointerDown(0));
-
-        //Палец двигается к конечной точке
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(700),
-                PointerInput.Origin.viewport(), left_x, middle_y));
-
-        //Убираем палец с экрана
-        swipe.addAction(finger.createPointerUp(0));
-
-        //Выполняем действия
-        driver.perform(Arrays.asList(swipe));
-
-    }
-
-    //Свайп слева справа (движение по оси Y не происходит). Нашли элемент, установили местоположение по оси X,Y, передвинули его по оси X
-    protected void swipeElementToRight(By by, String error_message) {
-        WebElement element = waitForElementPresent(
-                by,
-                error_message,
-                10);
-
-        // В переменную left_x записали самую левую точку нашего элемента по оси Х
-        int left_x = element.getLocation().getX();
-        // Находим самую правую точку экрана. element.getSize().getWidth() размер нашего элемента по ширине
-        int right_x = left_x + element.getSize().getWidth();
-
-        int upper_y = element.getLocation().getY();
-        int lower_y = upper_y + element.getSize().getHeight();
-
-        int middle_y = (upper_y + lower_y) / 2;
-
-        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-        Sequence swipe = new Sequence(finger, 1);
-
-        //Дваигаем палец на начальную позицию
-        swipe.addAction(finger.createPointerMove(Duration.ofSeconds(0),
-                PointerInput.Origin.viewport(), left_x, middle_y));
-        //Палец прикасается к экрану
-        swipe.addAction(finger.createPointerDown(0));
-
-        //Палец двигается к конечной точке
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(700),
-                PointerInput.Origin.viewport(), right_x, middle_y));
-
-        //Убираем палец с экрана
-        swipe.addAction(finger.createPointerUp(0));
-
-        //Выполняем действия
-        driver.perform(Arrays.asList(swipe));
-    }
 
 }
 
