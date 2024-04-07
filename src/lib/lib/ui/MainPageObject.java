@@ -17,9 +17,19 @@ import java.util.List;
 public class MainPageObject {
 
     protected AppiumDriver driver;
+    private static final String
+            SKIP_INPUT = "org.wikipedia:id/fragment_onboarding_skip_button";
 
     public MainPageObject(AppiumDriver driver) {
         this.driver = driver;
+    }
+
+    public void initSkipInput() {
+        this.waitForElementPresentAndClick(
+                By.id(SKIP_INPUT),
+                "Cannot find Skip element",
+                5
+        );
     }
 
     public WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
