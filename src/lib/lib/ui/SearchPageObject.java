@@ -13,7 +13,9 @@ public class SearchPageObject extends MainPageObject {
                     "and contains(@text, '{SUBSTRING}')]",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']" +
                     "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results']";
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results']",
+            SEARCH_RESULT = "org.wikipedia:id/search_results_list",
+            SEARCH_CLEAR = "org.wikipedia:id/search_src_text";
 
 
     public SearchPageObject(AppiumDriver driver) {
@@ -30,7 +32,8 @@ public class SearchPageObject extends MainPageObject {
         this.waitForElementPresentAndClick(
                 By.xpath(SEARCH_INIT_ELEMENT),
                 "Cannot find and click 'Search element' ",
-                5);
+                5
+        );
     }
 
     public void typeSearchLine(String search_line) {
@@ -56,14 +59,16 @@ public class SearchPageObject extends MainPageObject {
         this.waitForElementPresentAndClick(
                 By.id(SEARCH_CANCEL_BUTTON),
                 "Cannot find close element",
-                5);
+                5
+        );
     }
 
     public void waitForCancelButtonToDisappear() {
         this.waitForElementNotPresent(
                 By.id(SEARCH_CANCEL_BUTTON),
                 "Search cancel button is still present",
-                5);
+                5
+        );
     }
 
     public void clickByArticleWithSubstring(String substring) {
@@ -92,22 +97,37 @@ public class SearchPageObject extends MainPageObject {
         this.waitForElementPresent(
                 By.xpath(SEARCH_EMPTY_RESULT_ELEMENT),
                 "Cannot find empty result element.",
-                15);
-
+                15
+        );
     }
 
     public void assertThereIsNoResultOfSearch() {
         this.assertElementNotPresent(
                 By.xpath(SEARCH_RESULT_ELEMENT),
-                "Cannot find empty result element.");
-
+                "Cannot find empty result element."
+        );
     }
 
-    public void assertSearchElementHasText(){
+    public void assertSearchElementHasText() {
         this.assertElementHasText(
                 By.xpath(SEARCH_INIT_ELEMENT),
                 "Search Wikipedia",
                 "Другой текст вместо ожидаемого Search Wikipedia"
+        );
+    }
+
+    public void waitForSearchResults() {
+        this.waitForElementPresent(
+                By.id(SEARCH_RESULT),
+                "Cannot find 'element' "
+        );
+    }
+
+    public void clearSearchResults() {
+        this.waitForElementAndClear(
+                By.id(SEARCH_CLEAR),
+                "Cannot clear text in search field",
+                5
         );
     }
 

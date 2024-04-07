@@ -1,7 +1,9 @@
 package org.example;
 
 import lib.CoreTestCase;
-import lib.ui.*;
+import lib.ui.ArticlePageObject;
+import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.Test;
 import org.openqa.selenium.By;
 

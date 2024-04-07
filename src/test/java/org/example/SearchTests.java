@@ -4,7 +4,6 @@ import lib.CoreTestCase;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 public class SearchTests extends CoreTestCase {
 
@@ -70,8 +69,6 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.waitForCancelButtonToDisappear();
     }
 
-
-
     @Test
     public void testSearchClearCancel() {
 
@@ -80,22 +77,9 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject searchPageObject = new SearchPageObject(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-
-        MainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/search_results_list"),
-                "Cannot find 'element' "
-        );
-
-        MainPageObject.waitForElementAndClear(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Cannot clear text in search field",
-                5
-        );
-
-        MainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Cannot find 'element' "
-        );
+        searchPageObject.waitForSearchResults();
+        searchPageObject.clearSearchResults();
+        searchPageObject.assertSearchElementHasText();
     }
 
     @Test
