@@ -15,8 +15,8 @@ public class SearchPageObject extends MainPageObject {
                     "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
             SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results']",
             SEARCH_RESULT = "org.wikipedia:id/search_results_list",
-            SEARCH_CLEAR = "org.wikipedia:id/search_src_text";
-
+            SEARCH_CLEAR = "org.wikipedia:id/search_src_text",
+            SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL = "//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{SUBSTRINGTITLE}'] | //android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRINGDESCRIPTION}']";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -25,6 +25,12 @@ public class SearchPageObject extends MainPageObject {
     /* TEMPLATES METHODS*/
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultTitleDescriptionSearchElement(String substringTitle, String substringDescription) {
+        return SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL
+                .replace("{SUBSTRINGTITLE}", substringTitle)
+                .replace("{SUBSTRINGDESCRIPTION}", substringDescription);
     }
     /* TEMPLATES METHODS*/
 
@@ -128,6 +134,17 @@ public class SearchPageObject extends MainPageObject {
                 By.id(SEARCH_CLEAR),
                 "Cannot clear text in search field",
                 5
+        );
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description){
+
+        String search_result_title_description_xpath = getResultTitleDescriptionSearchElement(title, description);;
+
+        this.waitForElementPresent(
+                By.xpath(search_result_title_description_xpath),
+                "Cannot find element with such title and description: " + title + " , " + description,
+                15
         );
     }
 
