@@ -14,7 +14,10 @@ public class ArticlePageObject extends MainPageObject {
             CREATE_LIST_BUTTON = "//android.widget.TextView[@text=\"Create new\"]",
             INPUT_NAME_BUTTON = "//android.widget.EditText[@resource-id=\"org.wikipedia:id/text_input\"]",
             OK_INPUT_BUTTON = "android:id/button1",
-            NAVIGATE_UP_BUTTON = "//android.widget.ImageButton[@content-desc=\"Navigate up\"]";
+            NAVIGATE_UP_BUTTON = "//android.widget.ImageButton[@content-desc=\"Navigate up\"]",
+            NAME_OF_FOLDER_SUBSTRING_TPL = "//android.widget.TextView[@resource-id=\"org.wikipedia:id/item_title\" and @text='{SUBSTRING}']",
+            SEARCH_BUTTON_ON_ARTICLE_PAGE = "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_toolbar_button_search\"]";
+
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -102,5 +105,70 @@ public class ArticlePageObject extends MainPageObject {
                 5
         );
 
+    }
+
+    public void addArticleToMyOldList(String name_of_folder) {
+
+        this.waitForElementPresentAndClick(
+                By.xpath(SAVE_BUTTON),
+                "Cannot find 'Save element' ",
+                5
+        );
+
+        this.waitForElementPresentAndClick(
+                By.xpath(SAVE_BUTTON),
+                "Cannot find 'Save element' ",
+                5
+        );
+
+        this.waitForElementPresentAndClick(
+                By.xpath(ADD_TO_MY_LIST_BUTTON),
+                "Cannot find element 'Add to another reading list' ",
+                5
+        );
+
+        String old_name_of_folder_xpath = getNameOfFolder(name_of_folder);
+
+        this.waitForElementPresentAndClick(
+                By.xpath(old_name_of_folder_xpath),
+                "Cannot find name of folder " + name_of_folder,
+                5
+        );
+    }
+
+    /* TEMPLATES METHODS*/
+    private static String getNameOfFolder(String substring) {
+        return NAME_OF_FOLDER_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+    /* TEMPLATES METHODS*/
+
+    public void returnToTheMainPage(){
+
+        this.waitForElementPresentAndClick(
+                By.xpath(NAVIGATE_UP_BUTTON),
+                "Cannot find 'Back element' ",
+                5
+        );
+
+        this.waitForElementPresentAndClick(
+                By.xpath(NAVIGATE_UP_BUTTON),
+                "Cannot find 'Back element' ",
+                5
+        );
+
+        this.waitForElementPresentAndClick(
+                By.xpath(NAVIGATE_UP_BUTTON),
+                "Cannot find 'Back element' ",
+                5
+        );
+
+    }
+
+    public void clickOnSearchButton(){
+        this.waitForElementPresentAndClick(
+                By.xpath(SEARCH_BUTTON_ON_ARTICLE_PAGE),
+                "Cannot find 'Search element' ",
+                5
+        );
     }
 }

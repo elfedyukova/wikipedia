@@ -1,10 +1,9 @@
 package org.example;
 
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 public class ArticleTests extends CoreTestCase {
 
@@ -36,6 +35,21 @@ public class ArticleTests extends CoreTestCase {
     }
 
     @Test
+    public void testCompareArticleOfTitle() {
+
+        MainPageObject.initSkipInput();
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Java (programming language)");
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        articlePageObject.waitForTitleElement();
+
+    }
+
+    @Test
     public void testSwipeArticle() {
 
         MainPageObject.initSkipInput();
@@ -51,6 +65,55 @@ public class ArticleTests extends CoreTestCase {
         MainPageObject.verticalSwipeToBottom(700);
         MainPageObject.verticalSwipeToBottom(700);
         MainPageObject.verticalSwipeToBottom(700);
+
+    }
+
+    @Test
+    public void testSwipeArticleToFooter() {
+
+        MainPageObject.initSkipInput();
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Appium");
+
+        MainPageObject.waitForElementPresentAndClick(
+                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
+                        " and @text=\"Automation for Apps\"]"),
+                "Cannot find 'Skip element' ",
+                5
+        );
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        articlePageObject.swipeToFooter();
+
+    }
+
+    @Test
+    public void testSaveTwoArticle() {
+
+        MainPageObject.initSkipInput();
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Moscow");
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        searchPageObject.clickByArticleWithSubstring("Moscow");
+        articlePageObject.addArticleToMyList("City");
+        articlePageObject.clickOnSearchButton();
+
+        searchPageObject.typeSearchLine("Saint-Petersburg");
+        searchPageObject.clickByArticleWithSubstring("Saint Petersburg");
+        articlePageObject.addArticleToMyOldList("City");
+        articlePageObject.returnToTheMainPage();
+
+        NavigationUI navigationUI = new NavigationUI(driver);
+        navigationUI.clickMyLists();
+
+        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        myListsPageObject.openFolderByName("City");
+        myListsPageObject.swipeByArticleToDelete("Moscow");
 
     }
 }
