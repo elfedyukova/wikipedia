@@ -2,6 +2,7 @@ package org.example;
 
 import lib.CoreTestCase;
 import lib.ui.*;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
@@ -17,7 +18,7 @@ public class MyListsTests extends CoreTestCase {
 
         MainPageObject.initSkipInput();
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.clickByArticleWithSubstring("Java (programming language)");

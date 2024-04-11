@@ -2,20 +2,18 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
-    private static final String
-            SEARCH_INIT_ELEMENT = "xpath://*[contains(@text,'Search Wikipedia')]",
-            SEARCH_INPUT = "xpath://*[contains(@text,'Search Wikipedia')]",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_SUBSTRING_TPL = "xpath://android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_title\" " +
-                    "and contains(@text, '{SUBSTRING}')]",
-            SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']" +
-                    "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "xpath://*[@text='No results']",
-            SEARCH_RESULT = "id:org.wikipedia:id/search_results_list",
-            SEARCH_CLEAR = "id:org.wikipedia:id/search_src_text",
-            SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL = "xpath://android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{SUBSTRINGTITLE}'] | //android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRINGDESCRIPTION}']";
+     protected static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_SUBSTRING_TPL,
+            SEARCH_RESULT_ELEMENT,
+            SEARCH_EMPTY_RESULT_ELEMENT,
+            SEARCH_RESULT,
+            SEARCH_CLEAR,
+            SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);

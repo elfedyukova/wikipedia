@@ -10,7 +10,8 @@ public class WelcomePageObject extends MainPageObject {
             STEP_SEARCH_LANGUAGES = "id:Искать на более чем 300 языках",
             STEP_DATA_PRIVACY = "id:Data & Privacy",
             GET_STARTED_BUTTON = "xpath://XCUIElementTypeButton[@name=\"Начать\"]",
-            NEXT_BUTTON = "xpath://XCUIElementTypeButton[@name=\"Далее\"]";
+            NEXT_BUTTON = "xpath://XCUIElementTypeButton[@name=\"Далее\"]",
+            SKIPP_BUTTON = "xpath://XCUIElementTypeStaticText[@name=\"Пропустить\"]";
 
     public WelcomePageObject(AppiumDriver driver) {
         super(driver);
@@ -58,4 +59,10 @@ public class WelcomePageObject extends MainPageObject {
                 10);
     }
 
+    public void clickSkip() {
+        this.waitForElementPresentAndClick(
+                SKIPP_BUTTON,
+                "Cannot find and click skipp button " + SKIPP_BUTTON,
+                5);
+    }
 }

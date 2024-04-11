@@ -3,6 +3,7 @@ package org.example;
 import lib.CoreTestCase;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class SearchTests extends CoreTestCase {
@@ -19,7 +20,7 @@ public class SearchTests extends CoreTestCase {
 
         MainPageObject.initSkipInput();
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_line = "Linkin park discography";
         searchPageObject.typeSearchLine(search_line);
@@ -35,9 +36,7 @@ public class SearchTests extends CoreTestCase {
     @Test
     public void testAmountOfEmptySearch() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_line = "qqqqqqqqqq";
         searchPageObject.typeSearchLine(search_line);
@@ -51,7 +50,7 @@ public class SearchTests extends CoreTestCase {
 
         MainPageObject.initSkipInput();
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.assertSearchElementHasText();
 
@@ -62,7 +61,7 @@ public class SearchTests extends CoreTestCase {
 
         MainPageObject.initSkipInput();
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForCancelButtonToAppear();
@@ -74,7 +73,7 @@ public class SearchTests extends CoreTestCase {
 
         MainPageObject.initSkipInput();
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForSearchResults();
@@ -87,7 +86,7 @@ public class SearchTests extends CoreTestCase {
 
         MainPageObject.initSkipInput();
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForSearchResult("Java");
@@ -98,7 +97,7 @@ public class SearchTests extends CoreTestCase {
 
         MainPageObject.initSkipInput();
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_line = "IT";
         searchPageObject.typeSearchLine(search_line);
