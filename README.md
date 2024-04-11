@@ -11,6 +11,10 @@ https://www.learnqa.ru/java
 
 В рамках этого проекта будут созданы автотесты для https://ru.wikipedia.org/wiki/
 
+* Android
+* IOS
+* Mobile Web
+
 ## Технологии
 
 * Java - основной язык программирования

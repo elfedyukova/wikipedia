@@ -3,9 +3,12 @@ package org.example;
 import lib.CoreTestCase;
 import lib.ui.*;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 public class ArticleTests extends CoreTestCase {
+
+    private static final String
+            ARTICLE_TITLE = "xpath://android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
+            " and @text=\"Automation for Apps\"]";
 
     private MainPageObject MainPageObject;
 
@@ -78,8 +81,7 @@ public class ArticleTests extends CoreTestCase {
         searchPageObject.typeSearchLine("Appium");
 
         MainPageObject.waitForElementPresentAndClick(
-                By.xpath("//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
-                        " and @text=\"Automation for Apps\"]"),
+                ARTICLE_TITLE,
                 "Cannot find 'Skip element' ",
                 5
         );
