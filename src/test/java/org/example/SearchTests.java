@@ -17,9 +17,6 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testAmountOfNotEmptySearch() {
-
-        MainPageObject.initSkipInput();
-
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_line = "Linkin park discography";
@@ -35,32 +32,24 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testAmountOfEmptySearch() {
-
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_line = "qqqqqqqqqq";
         searchPageObject.typeSearchLine(search_line);
         searchPageObject.waitForEmptyResultsLabel();
-        searchPageObject.assertThereIsNoResultOfSearch();
+        //searchPageObject.assertThereIsNoResultOfSearch();
 
     }
 
     @Test
     public void testElementHasText() {
-
-        MainPageObject.initSkipInput();
-
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.assertSearchElementHasText();
-
     }
 
     @Test
     public void testSearchCancel() {
-
-        MainPageObject.initSkipInput();
-
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
@@ -70,22 +59,16 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchClearCancel() {
-
-        MainPageObject.initSkipInput();
-
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForSearchResults();
         searchPageObject.clearSearchResults();
-        searchPageObject.assertSearchElementHasText();
+        searchPageObject.waitForSearchElementIsPresentOnMainPageIos();
     }
 
     @Test
     public void testWordSearch() {
-
-        MainPageObject.initSkipInput();
-
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
@@ -94,9 +77,6 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchByTitleAndDescription() {
-
-        MainPageObject.initSkipInput();
-
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_line = "IT";

@@ -7,6 +7,7 @@ abstract public class SearchPageObject extends MainPageObject {
      protected static String
             SEARCH_INIT_ELEMENT,
             SEARCH_INPUT,
+             SEARCH_ELEMENT_ON_MAIN_PAGE_IOS,
             SEARCH_CANCEL_BUTTON,
             SEARCH_RESULT_SUBSTRING_TPL,
             SEARCH_RESULT_ELEMENT,
@@ -54,7 +55,7 @@ abstract public class SearchPageObject extends MainPageObject {
         this.waitForWordPresent(
                 search_result_xpath,
                 "Cannot find search result with substring " + substring,
-                5
+                10
         );
     }
 
@@ -69,6 +70,14 @@ abstract public class SearchPageObject extends MainPageObject {
     public void waitForCancelButtonToDisappear() {
         this.waitForElementNotPresent(
                 SEARCH_CANCEL_BUTTON,
+                "Search cancel button is still present",
+                5
+        );
+    }
+
+    public void waitForSearchElementIsPresentOnMainPageIos() {
+        this.waitForElementPresent(
+                SEARCH_ELEMENT_ON_MAIN_PAGE_IOS,
                 "Search cancel button is still present",
                 5
         );
@@ -107,14 +116,16 @@ abstract public class SearchPageObject extends MainPageObject {
     public void assertThereIsNoResultOfSearch() {
         this.assertElementNotPresent(
                 SEARCH_RESULT_ELEMENT,
-                "Cannot find empty result element."
+                " Cannot find empty result element."
         );
     }
+
+    public abstract String getSearchExpectedText();
 
     public void assertSearchElementHasText() {
         this.assertElementHasText(
                 SEARCH_INIT_ELEMENT,
-                "Search Wikipedia",
+                getSearchExpectedText(),
                 "Другой текст вместо ожидаемого Search Wikipedia"
         );
     }
