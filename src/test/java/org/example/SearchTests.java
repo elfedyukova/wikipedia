@@ -3,8 +3,11 @@ package org.example;
 import lib.CoreTestCase;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.TitleDescriptionPair;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
+
+import java.util.List;
 
 public class SearchTests extends CoreTestCase {
 
@@ -81,9 +84,13 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.initSearchInput();
         String search_line = "IT";
         searchPageObject.typeSearchLine(search_line);
-        searchPageObject.waitForElementByTitleAndDescription("Italy", "Country in Southern Europe");
-        searchPageObject.waitForElementByTitleAndDescription("Itunes", "Apple's media library and media player software");
-        searchPageObject.waitForElementByTitleAndDescription("Italy national football team", "Men's association football team");
+        //searchPageObject.waitForElementByTitleAndDescription("Italy", "Country in Southern Europe");
+        //searchPageObject.waitForElementByTitleAndDescription("Itunes", "Apple's media library and media player software");
+        //searchPageObject.waitForElementByTitleAndDescription("Italy national football team", "Men's association football team");
+        List<TitleDescriptionPair> expectedTexts = searchPageObject.getSearchExpectedTexts();
 
+        for (TitleDescriptionPair expectedText : expectedTexts) {
+            searchPageObject.waitForElementByTitleAndDescription(expectedText.getTitle(), expectedText.getDescription());
+        }
     }
 }

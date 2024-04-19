@@ -15,32 +15,34 @@ public class Platform {
 
     private static Platform instance;
 
-    private Platform(){}
+    private Platform() {
+    }
 
-    public static Platform getInstance(){
-        if(instance == null){
+    public static Platform getInstance() {
+        if (instance == null) {
             instance = new Platform();
-        }return instance;
+        }
+        return instance;
     }
 
     //метод отвечающий за выбор нужного драйвера
-    public AppiumDriver getDriver() throws Exception{
+    public AppiumDriver getDriver() throws Exception {
         URL URL = new URL(APPIUM_URL);
 
-        if(this.isAndroid()){
-            return  new AndroidDriver(URL, this.getAndroidDesiredCapabilities());
+        if (this.isAndroid()) {
+            return new AndroidDriver(URL, this.getAndroidDesiredCapabilities());
         } else if (this.isIos()) {
-            return  new IOSDriver(URL, this.getIosDesiredCapabilities());
+            return new IOSDriver(URL, this.getIosDesiredCapabilities());
         } else {
             throw new Exception("Cannot detect type of the Driver. Platform value: " + this.getPlatformVar());
         }
     }
 
-    public boolean isAndroid () {
+    public boolean isAndroid() {
         return isPlatform(PLATFORM_ANDROID);
     }
 
-    public boolean isIos () {
+    public boolean isIos() {
         return isPlatform(PLATFORM_IOS);
     }
 
@@ -70,12 +72,12 @@ public class Platform {
         return capabilities;
     }
 
-    private boolean isPlatform (String my_platform){
+    private boolean isPlatform(String my_platform) {
         String platform = this.getPlatformVar();
         return my_platform.equals(platform);
     }
 
-    private String getPlatformVar(){
+    private String getPlatformVar() {
         return System.getenv("PLATFORM");
     }
 

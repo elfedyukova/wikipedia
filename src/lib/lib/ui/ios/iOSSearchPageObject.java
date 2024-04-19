@@ -2,6 +2,10 @@ package lib.ui.ios;
 
 import io.appium.java_client.AppiumDriver;
 import lib.ui.SearchPageObject;
+import lib.ui.TitleDescriptionPair;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class iOSSearchPageObject extends SearchPageObject {
 
@@ -15,10 +19,10 @@ public class iOSSearchPageObject extends SearchPageObject {
         SEARCH_EMPTY_RESULT_ELEMENT = "xpath://XCUIElementTypeStaticText[@name=\'Ничего не найдено\']";
         SEARCH_RESULT = "xpath://XCUIElementTypeApplication[@name=\"Википедия\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeCollectionView";
         SEARCH_CLEAR = "xpath://XCUIElementTypeStaticText[@name=\"Отменить\"]";
-        SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL = "xpath://android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{SUBSTRINGTITLE}'] | //android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRINGDESCRIPTION}']";
+        SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL = "xpath://XCUIElementTypeStaticText[@name='{SUBSTRINGTITLE}'] | //XCUIElementTypeStaticText[@name='{SUBSTRINGDESCRIPTION}']";
     }
 
-    public iOSSearchPageObject(AppiumDriver driver){
+    public iOSSearchPageObject(AppiumDriver driver) {
         super(driver);
     }
 
@@ -27,5 +31,13 @@ public class iOSSearchPageObject extends SearchPageObject {
         return "Поиск по Википедии";
     }
 
-
+    @Override
+    public List<TitleDescriptionPair> getSearchExpectedTexts() {
+        // создаем список пар "название-описание" для iOS
+        return Arrays.asList(
+                new TitleDescriptionPair("It Takes Two", "Компьютерная игра 2021 года в жанре action-adventure"),
+                new TitleDescriptionPair("It Must Have Been Love", "Сингл группы Roxette"),
+                new TitleDescriptionPair("Itanium", "Микропроцессор")
+        );
+    }
 }

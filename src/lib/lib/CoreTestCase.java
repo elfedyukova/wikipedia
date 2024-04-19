@@ -47,15 +47,15 @@ public class CoreTestCase extends TestCase {
         driver.runAppInBackground(duration);
     }
 
-    private void skipWelcomePageForIosApp(){
-        if(Platform.getInstance().isIos()){
+    private void skipWelcomePageForIosApp() {
+        if (Platform.getInstance().isIos()) {
             WelcomePageObject welcomePageObject = new WelcomePageObject(driver);
             welcomePageObject.clickSkip();
         }
     }
 
-    private void skipWelcomePageForAndroidApp(){
-        if(Platform.getInstance().isAndroid()){
+    private void skipWelcomePageForAndroidApp() {
+        if (Platform.getInstance().isAndroid()) {
             MainPageObject mainPageObject = new MainPageObject(driver);
             mainPageObject.initSkipInput();
         }

@@ -2,12 +2,14 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
+import java.util.List;
+
 abstract public class SearchPageObject extends MainPageObject {
 
-     protected static String
+    protected static String
             SEARCH_INIT_ELEMENT,
             SEARCH_INPUT,
-             SEARCH_ELEMENT_ON_MAIN_PAGE_IOS,
+            SEARCH_ELEMENT_ON_MAIN_PAGE_IOS,
             SEARCH_CANCEL_BUTTON,
             SEARCH_RESULT_SUBSTRING_TPL,
             SEARCH_RESULT_ELEMENT,
@@ -155,5 +157,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 15
         );
     }
+
+    public abstract List<TitleDescriptionPair> getSearchExpectedTexts();
 
 }
