@@ -89,4 +89,14 @@ abstract public class MyListsPageObject extends MainPageObject {
         );
     }
 
+    public void checkOnOfTheTwoSavedArticleOnIos(String article_title) {
+        String article_xpath = getSavedArticleXpathByTitle(article_title);
+
+        this.waitForElementPresent(
+                article_xpath,
+                "Cannot find 'Article element' ",
+                5
+        );
+
+    }
 }

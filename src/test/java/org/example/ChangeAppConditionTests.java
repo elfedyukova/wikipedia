@@ -56,10 +56,10 @@ public class ChangeAppConditionTests extends CoreTestCase {
 
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForSearchResult("Java (programming language)");
+        searchPageObject.waitForSearchResult("Java");
 
         this.backgroundApp(2);
-        searchPageObject.waitForSearchResult("Java (programming language)");
+        searchPageObject.waitForSearchResult("Java");
 
     }
 

@@ -173,4 +173,10 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public abstract List<TitleDescriptionPair> getSearchExpectedTexts();
 
+    public void search(String query) {
+        this.initSearchInput();
+        this.typeSearchLine(query);
+        this.clickByArticleWithSubstring(query);
+    }
+
 }

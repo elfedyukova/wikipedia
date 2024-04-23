@@ -1,6 +1,7 @@
 package org.example;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.*;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
@@ -13,12 +14,16 @@ public class ArticleTests extends CoreTestCase {
     private MainPageObject MainPageObject;
     private SearchPageObject searchPageObject;
     private ArticlePageObject articlePageObject;
+    private NavigationUI navigationUI;
+    private MyListsPageObject myListsPageObject;
 
     protected void setUp() throws Exception {
         super.setUp();
         MainPageObject = new MainPageObject(driver);
-        searchPageObject = SearchPageObjectFactory.get(driver); // Инициализация переменной
+        searchPageObject = SearchPageObjectFactory.get(driver);
         articlePageObject = ArticlePageObjectFactory.get(driver);
+        navigationUI = NavigationUIFactory.get(driver);
+        myListsPageObject = MyListsPageObjectFactory.get(driver);
     }
 
     @Test
@@ -77,25 +82,31 @@ public class ArticleTests extends CoreTestCase {
     @Test
     public void testSaveTwoArticle() {
 
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Москва");
-        searchPageObject.clickByArticleWithSubstring("Москва");
+        searchPageObject.search("Москва");
 
-        articlePageObject.addArticleToMyList("City");
-        articlePageObject.clickOnSearchButton();
+        if (Platform.getInstance().isAndroid()) {
 
-        searchPageObject.typeSearchLine("Санкт-Петербург");
-        searchPageObject.clickByArticleWithSubstring("Санкт-Петербург");
+            articlePageObject.addArticleToMyList("City");
+            articlePageObject.clickOnSearchButton();
+            searchPageObject.typeSearchLine("Санкт-Петербург");
+            searchPageObject.clickByArticleWithSubstring("Санкт-Петербург");
+            articlePageObject.addArticleToMyOldList("City");
+            articlePageObject.returnToTheMainPage();
+            navigationUI.clickMyLists();
+            myListsPageObject.openFolderByName("City");
+            myListsPageObject.swipeByArticleToDelete("Moscow");
 
-        articlePageObject.addArticleToMyOldList("City");
-        articlePageObject.returnToTheMainPage();
+        } else {
+            articlePageObject.addArticlesToMySaved();
+            articlePageObject.closeArticleOnIos();
+            searchPageObject.search("Санкт-Петербург");
+            articlePageObject.addArticlesToMySaved();
+            articlePageObject.closeArticleOnIos();
 
-        NavigationUI navigationUI = NavigationUIFactory.get(driver);
-        navigationUI.clickMyLists();
+            navigationUI.clickMyListsOnIos();
+            myListsPageObject.checkOnOfTheTwoSavedArticleOnIos("Санкт-Петербург");
 
-        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
-        myListsPageObject.openFolderByName("City");
-        myListsPageObject.swipeByArticleToDelete("Moscow");
+        }
 
     }
 }
