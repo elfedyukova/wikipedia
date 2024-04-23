@@ -2,7 +2,6 @@ package org.example;
 
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
@@ -10,24 +9,22 @@ import org.junit.Test;
 
 public class ChangeAppConditionTests extends CoreTestCase {
 
-    private MainPageObject MainPageObject;
+    private SearchPageObject searchPageObject;
+    private ArticlePageObject articlePageObject;
 
     protected void setUp() throws Exception {
         super.setUp();
-        MainPageObject = new MainPageObject(driver);
+        searchPageObject = SearchPageObjectFactory.get(driver);
+        articlePageObject = ArticlePageObjectFactory.get(driver);
     }
 
     @Test
     public void testChangeScreenOrientationOnSearchResults() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Java (programming language)");
+        searchPageObject.clickByArticleWithSubstring();
 
-        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String title_before_rotation = articlePageObject.getArticleTitle();
 
         try {
@@ -57,9 +54,6 @@ public class ChangeAppConditionTests extends CoreTestCase {
     @Test
     public void testCheckSearchArticleInBackground() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForSearchResult("Java (programming language)");
