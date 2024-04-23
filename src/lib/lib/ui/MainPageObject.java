@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -12,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -183,43 +185,54 @@ public class MainPageObject {
 
     }
 
-    //Свайп справа налево (движение по оси Y не происходит)
-    //Нашли элемент, установили местоположение по оси X,Y. После этого передвинуть его по оси X справа налево
     public void swipeElementToLeft(String locator, String error_message) {
-        WebElement element = waitForElementPresent(
-                locator,
-                error_message,
-                10);
 
-        // В переменную left_x записали самую левую точку нашего элемента по оси Х
-        int left_x = element.getLocation().getX();
-        // Находим самую правую точку экрана. element.getSize().getWidth() размер нашего элемента по ширине
-        int right_x = left_x + element.getSize().getWidth();
+        WebElement element = waitForElementPresent(locator, error_message, 10);
 
-        int upper_y = element.getLocation().getY();
-        int lower_y = upper_y + element.getSize().getHeight();
-
+        int left_x = element.getLocation().x;
+        int right_x = left_x + element.getSize().width;
+        int upper_y = element.getLocation().y;
+        int lower_y = upper_y + element.getSize().height;
         int middle_y = (upper_y + lower_y) / 2;
 
         PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-        Sequence swipe = new Sequence(finger, 1);
 
-        //Дваигаем палец на начальную позицию
-        swipe.addAction(finger.createPointerMove(Duration.ofSeconds(0),
-                PointerInput.Origin.viewport(), right_x, middle_y));
-        //Палец прикасакается к экрану
-        swipe.addAction(finger.createPointerDown(0));
+        Sequence actions = new Sequence(finger, 1);
 
-        //Палец двигается к конечной точке
-        swipe.addAction(finger.createPointerMove(Duration.ofMillis(700),
-                PointerInput.Origin.viewport(), left_x, middle_y));
+        // Стартовая позиция
+        actions.addAction(finger.createPointerMove(
+                Duration.ofSeconds(0),
+                PointerInput.Origin.viewport(),
+                right_x,
+                middle_y)
+        );
 
-        //Убираем палец с экрана
-        swipe.addAction(finger.createPointerUp(0));
+        // Опустить палец на экран
+        actions.addAction(finger.createPointerDown(0));
 
-        //Выполняем действия
-        driver.perform(Arrays.asList(swipe));
+        // Сдвинуть палец к точке (left_x, middle_y) на Android
+        if (Platform.getInstance().isAndroid()) {
+            actions.addAction(finger.createPointerMove(
+                    Duration.ofMillis(100),
+                    PointerInput.Origin.viewport(),
+                    left_x,
+                    middle_y)
+            );
+            // Сдвинуть палец влево на всю ширину экрана на iOS
+        } else {
+            int offset_x = (-1 * element.getSize().width);
+            actions.addAction(finger.createPointerMove(
+                    Duration.ofMillis(100),
+                    PointerInput.Origin.viewport(),
+                    offset_x,
+                    middle_y)
+            );
+        }
 
+        // Поднять палец
+        actions.addAction(finger.createPointerUp(0));
+
+        driver.perform(Collections.singletonList(actions));
     }
 
     //Свайп слева справа (движение по оси Y не происходит). Нашли элемент, установили местоположение по оси X,Y, передвинули его по оси X
@@ -259,11 +272,16 @@ public class MainPageObject {
         driver.perform(Arrays.asList(swipe));
     }
 
+    public boolean isElementLocatedOnTheScreen(String locator) {
+        int element_location_by_y = this.waitForElementPresent(locator, "Cannot find element by locator", 5).getLocation().getY();
+        int screen_size_by_y = driver.manage().window().getSize().getHeight();
+        return element_location_by_y < screen_size_by_y;
+    }
+
     private By getLocatorString(String locator_with_type) {
         String[] exploded_locator = locator_with_type.split(Pattern.quote(":"), 2);
         String by_type = exploded_locator[0];
         String locator = exploded_locator[1];
-        //String locator = exploded_locator[1].substring(2);
 
         if (by_type.equals("xpath")) {
             return By.xpath(locator);

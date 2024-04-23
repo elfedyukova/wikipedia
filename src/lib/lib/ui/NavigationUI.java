@@ -2,12 +2,12 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
-public class NavigationUI extends MainPageObject {
+abstract public class NavigationUI extends MainPageObject {
 
-    private static final String
-            NAVIGATION_SAVE_BUTTON = "xpath:\t\n" +
-            "(//android.widget.FrameLayout[@resource-id=\"org.wikipedia:id/navigation_bar_item_icon_container\"])[2]",
-            GOT_IT_BUTTON = "id:org.wikipedia:id/negativeButton";
+    protected static String
+            NAVIGATION_SAVE_BUTTON,
+            CANCEL_SYNCHRONIZATION_BUTTON,
+            GOT_IT_BUTTON;
 
     public NavigationUI(AppiumDriver driver) {
         super(driver);
@@ -25,6 +25,21 @@ public class NavigationUI extends MainPageObject {
                 GOT_IT_BUTTON,
                 "Cannot find 'Not now' ",
                 5
+        );
+    }
+
+    public void clickMyListsOnIos() {
+
+        this.waitForElementPresentAndClick(
+                NAVIGATION_SAVE_BUTTON,
+                "Cannot find 'element' Сохранить ",
+                10
+        );
+
+        this.waitForElementPresentAndClick(
+                CANCEL_SYNCHRONIZATION_BUTTON,
+                "Cannot find 'element' Закрыть ",
+                10
         );
     }
 }

@@ -85,13 +85,26 @@ abstract public class SearchPageObject extends MainPageObject {
         );
     }
 
+    public abstract String getSearchExpectedArticleText();
+
+    public void clickByArticleWithSubstring() {
+        //String search_result_xpath = getResultSearchElement(substring);
+        String search_result_xpath = getResultSearchElement(getSearchExpectedArticleText());
+
+        this.waitForElementPresentAndClick(
+                search_result_xpath,
+                "Cannot find and click search result with substring " + getSearchExpectedArticleText(),
+                5
+        );
+    }
+
     public void clickByArticleWithSubstring(String substring) {
 
         String search_result_xpath = getResultSearchElement(substring);
 
         this.waitForElementPresentAndClick(
                 search_result_xpath,
-                "Cannot find and click search result with substring " + substring,
+                "Cannot find and click search result with substring " + search_result_xpath,
                 5
         );
     }

@@ -22,6 +22,8 @@ public class iOSSearchPageObject extends SearchPageObject {
         SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL = "xpath://XCUIElementTypeStaticText[@name='{SUBSTRINGTITLE}'] | //XCUIElementTypeStaticText[@name='{SUBSTRINGDESCRIPTION}']";
     }
 
+    private String articleName;
+
     public iOSSearchPageObject(AppiumDriver driver) {
         super(driver);
     }
@@ -29,6 +31,11 @@ public class iOSSearchPageObject extends SearchPageObject {
     @Override
     public String getSearchExpectedText() {
         return "Поиск по Википедии";
+    }
+
+    @Override
+    public String getSearchExpectedArticleText() {
+        return "Java";
     }
 
     @Override

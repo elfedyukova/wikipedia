@@ -3,19 +3,22 @@ package lib.ui;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
 
-    private static final String
-            TITLE = "xpath://android.widget.TextView[@text='Java (programming language)']",
-            FOOTER_ELEMENT = "xpath://android.widget.TextView[@text=\"View article in browser\"]",
-            SAVE_BUTTON = "xpath://android.widget.TextView[@content-desc=\"Save\"]",
-            ADD_TO_MY_LIST_BUTTON = "xpath://android.widget.TextView[@resource-id=\"org.wikipedia:id/title\" and @text=\"Add to another reading list\"]",
-            CREATE_LIST_BUTTON = "xpath://android.widget.TextView[@text=\"Create new\"]",
-            INPUT_NAME_BUTTON = "xpath://android.widget.EditText[@resource-id=\"org.wikipedia:id/text_input\"]",
-            OK_INPUT_BUTTON = "id:android:id/button1",
-            NAVIGATE_UP_BUTTON = "xpath://android.widget.ImageButton[@content-desc=\"Navigate up\"]",
-            NAME_OF_FOLDER_SUBSTRING_TPL = "xpath://android.widget.TextView[@resource-id=\"org.wikipedia:id/item_title\" and @text='{SUBSTRING}']",
-            SEARCH_BUTTON_ON_ARTICLE_PAGE = "xpath://android.widget.TextView[@resource-id=\"org.wikipedia:id/page_toolbar_button_search\"]";
+abstract public class ArticlePageObject extends MainPageObject {
+
+    protected static String
+            TITLE,
+            FOOTER_ELEMENT,
+            SAVE_BUTTON,
+            ADD_TO_MY_LIST_BUTTON,
+            CREATE_LIST_BUTTON,
+            INPUT_NAME_BUTTON,
+            OK_INPUT_BUTTON,
+            NAVIGATE_UP_BUTTON,
+            NAME_OF_FOLDER_SUBSTRING_TPL,
+            ARTICLE_TITLE,
+            CANCEL_BUTTON,
+            SEARCH_BUTTON_ON_ARTICLE_PAGE;
 
 
     public ArticlePageObject(AppiumDriver driver) {
@@ -37,7 +40,11 @@ public class ArticlePageObject extends MainPageObject {
 
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        if (lib.Platform.getInstance().isAndroid()) {
+            return title_element.getAttribute("text");
+        } else {
+            return title_element.getAttribute("name");
+        }
     }
 
     public void swipeToFooter() {
@@ -169,5 +176,14 @@ public class ArticlePageObject extends MainPageObject {
                 "Cannot find 'Search element' ",
                 5
         );
+    }
+
+    public void addArticlesToMySaved() {
+        this.waitForElementPresentAndClick(SAVE_BUTTON, "Cannot find Save element on IOS", 5);
+    }
+
+    public void closeArticleOnIos() {
+        this.waitForElementPresentAndClick(NAVIGATE_UP_BUTTON, "", 5);
+        this.waitForElementPresentAndClick(CANCEL_BUTTON, "Cannot click on Отменить", 5);
     }
 }

@@ -2,38 +2,38 @@ package org.example;
 
 import lib.CoreTestCase;
 import lib.ui.*;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MyListsPageObjectFactory;
+import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class ArticleTests extends CoreTestCase {
 
-    private static final String
-            ARTICLE_TITLE = "xpath://android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\"" +
-            " and @text=\"Automation for Apps\"]";
-
     private MainPageObject MainPageObject;
+    private SearchPageObject searchPageObject;
+    private ArticlePageObject articlePageObject;
 
     protected void setUp() throws Exception {
         super.setUp();
         MainPageObject = new MainPageObject(driver);
+        searchPageObject = SearchPageObjectFactory.get(driver); // Инициализация переменной
+        articlePageObject = ArticlePageObjectFactory.get(driver);
     }
 
     @Test
     public void testCompareArticleTitle() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Java (programming language)");
+        searchPageObject.clickByArticleWithSubstring();
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
         String article_title = articlePageObject.getArticleTitle();
+        String expectedArticleName = searchPageObject.getSearchExpectedArticleText();
 
         assertEquals(
-                "We do not see Java (programming language)",
-                "Java (programming language)",
+                "We do not see article title ",
+                expectedArticleName,
                 article_title
         );
     }
@@ -41,29 +41,20 @@ public class ArticleTests extends CoreTestCase {
     @Test
     public void testCompareArticleOfTitle() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Java (programming language)");
+        searchPageObject.clickByArticleWithSubstring();
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
         articlePageObject.waitForTitleElement();
-
     }
 
     @Test
     public void testSwipeArticle() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Java (programming language)");
+        searchPageObject.clickByArticleWithSubstring();
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
         articlePageObject.waitForTitleElement();
 
         MainPageObject.verticalSwipeToBottom(700);
@@ -75,19 +66,10 @@ public class ArticleTests extends CoreTestCase {
     @Test
     public void testSwipeArticleToFooter() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Appium");
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring();
 
-        MainPageObject.waitForElementPresentAndClick(
-                ARTICLE_TITLE,
-                "Cannot find 'Skip element' ",
-                5
-        );
-
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
         articlePageObject.swipeToFooter();
 
     }
@@ -95,26 +77,23 @@ public class ArticleTests extends CoreTestCase {
     @Test
     public void testSaveTwoArticle() {
 
-        MainPageObject.initSkipInput();
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Moscow");
+        searchPageObject.typeSearchLine("Москва");
+        searchPageObject.clickByArticleWithSubstring("Москва");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-        searchPageObject.clickByArticleWithSubstring("Moscow");
         articlePageObject.addArticleToMyList("City");
         articlePageObject.clickOnSearchButton();
 
-        searchPageObject.typeSearchLine("Saint-Petersburg");
-        searchPageObject.clickByArticleWithSubstring("Saint Petersburg");
+        searchPageObject.typeSearchLine("Санкт-Петербург");
+        searchPageObject.clickByArticleWithSubstring("Санкт-Петербург");
+
         articlePageObject.addArticleToMyOldList("City");
         articlePageObject.returnToTheMainPage();
 
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickMyLists();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
         myListsPageObject.openFolderByName("City");
         myListsPageObject.swipeByArticleToDelete("Moscow");
 

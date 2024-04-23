@@ -43,4 +43,9 @@ public class AndroidSearchPageObject extends SearchPageObject {
         );
     }
 
+    @Override
+    public String getSearchExpectedArticleText() {
+        return "Java (programming language)";
+    }
+
 }
