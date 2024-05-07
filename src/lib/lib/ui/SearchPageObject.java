@@ -1,6 +1,6 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ abstract public class SearchPageObject extends MainPageObject {
             SEARCH_CLEAR,
             SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL;
 
-    public SearchPageObject(AppiumDriver driver) {
+    public SearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -93,7 +93,7 @@ abstract public class SearchPageObject extends MainPageObject {
 
         this.waitForElementPresentAndClick(
                 search_result_xpath,
-                "Cannot find and click search result with substring " + getSearchExpectedArticleText(),
+                "Cannot find and click search result with substring " + getSearchExpectedArticleText() + search_result_xpath,
                 5
         );
     }
@@ -139,7 +139,7 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void assertSearchElementHasText() {
         this.assertElementHasText(
-                SEARCH_INIT_ELEMENT,
+                SEARCH_INPUT,
                 getSearchExpectedText(),
                 "Другой текст вместо ожидаемого Search Wikipedia"
         );

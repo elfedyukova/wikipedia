@@ -1,13 +1,14 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -15,15 +16,16 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class MainPageObject {
 
     private static final String
             SKIP_INPUT = "id:org.wikipedia:id/fragment_onboarding_skip_button";
-    protected AppiumDriver driver;
+    protected RemoteWebDriver driver;
 
-    public MainPageObject(AppiumDriver driver) {
+    public MainPageObject(RemoteWebDriver driver) {
         this.driver = driver;
     }
 
@@ -274,8 +276,37 @@ public class MainPageObject {
 
     public boolean isElementLocatedOnTheScreen(String locator) {
         int element_location_by_y = this.waitForElementPresent(locator, "Cannot find element by locator", 5).getLocation().getY();
+        if(Platform.getInstance().isMw()){
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+            Object is_result = javascriptExecutor.executeScript("return window.pageYOfset");
+            element_location_by_y -= Integer.parseInt(is_result.toString());
+        }
         int screen_size_by_y = driver.manage().window().getSize().getHeight();
         return element_location_by_y < screen_size_by_y;
+    }
+
+    public void scrollWebPageUp(){
+        if(Platform.getInstance().isMw()){
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+            javascriptExecutor.executeScript("window.scrollBy(0, 250)");
+        } else {
+            System.out.println("Method scrollWebPageUp do nothing for platform" + Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    public void scrollWebPageTitleElementNotVisible(String locator, String error_message, int max_swipes){
+        int already_swiped = 0;
+
+        WebElement webElement = this.waitForElementPresent(locator, error_message);
+
+        while (!this.isElementLocatedOnTheScreen(locator)){
+            scrollWebPageUp();
+            ++already_swiped;
+
+            if (already_swiped > max_swipes){
+                Assert.assertTrue(error_message, webElement.isDisplayed());
+            }
+        }
     }
 
     private By getLocatorString(String locator_with_type) {
@@ -287,6 +318,8 @@ public class MainPageObject {
             return By.xpath(locator);
         } else if (by_type.equals("id")) {
             return By.id(locator);
+        } else if (by_type.equals("css")) {
+            return By.cssSelector(locator);
         } else {
             throw new IllegalArgumentException("Cannot get type locator. Locator: " + locator_with_type);
         }

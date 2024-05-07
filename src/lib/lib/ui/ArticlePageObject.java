@@ -1,7 +1,8 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 
 abstract public class ArticlePageObject extends MainPageObject {
@@ -21,7 +22,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             SEARCH_BUTTON_ON_ARTICLE_PAGE;
 
 
-    public ArticlePageObject(AppiumDriver driver) {
+    public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -42,17 +43,27 @@ abstract public class ArticlePageObject extends MainPageObject {
         WebElement title_element = waitForTitleElement();
         if (lib.Platform.getInstance().isAndroid()) {
             return title_element.getAttribute("text");
-        } else {
+        } else if (Platform.getInstance().isIos()) {
             return title_element.getAttribute("name");
+        } else {
+            return title_element.getText();
         }
     }
 
     public void swipeToFooter() {
-        this.swipeUpToFindElement(
-                FOOTER_ELEMENT,
-                "Cannot find the end of article ",
-                5
-        );
+        if (Platform.getInstance().isMw()){
+            this.scrollWebPageTitleElementNotVisible(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of article ",
+                    40
+            );
+        } else {
+            this.swipeUpToFindElement(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of article ",
+                    5
+            );
+        }
     }
 
     public void addArticleToMyList(String name_of_folder) {

@@ -13,4 +13,5 @@ import org.junit.runners.Suite;
         MyListsTests.class,
         GetStartedTest.class
 })
-public class TestSuite {}
+public class TestSuite {
+}

@@ -1,8 +1,8 @@
 package lib.ui.android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.SearchPageObject;
 import lib.ui.TitleDescriptionPair;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ public class AndroidSearchPageObject extends SearchPageObject {
         SEARCH_RESULT_SUBSTRING_TITLE_DESCRIPTION_TPL = "xpath://android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{SUBSTRINGTITLE}'] | //android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRINGDESCRIPTION}']";
     }
 
-    public AndroidSearchPageObject(AppiumDriver driver) {
+    public AndroidSearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
